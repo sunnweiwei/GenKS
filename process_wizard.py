@@ -235,49 +235,6 @@ def main():
     print(len(saved))
     print(num)
     json.dump(saved, open('dataset/wizard/seen_full.json', 'w'))
-    input('>>')
-
-    for i in range(len(raw_data)):
-        last_example = None
-        for j in range(100):
-            example = agent.example(i, j)
-            if example is None:
-                break
-            print(json.dumps(example, indent=4))
-            input('>')
-            if example['checked_sentence'] not in example['knowledge'][example['title']] and \
-                    example['checked_sentence'] != 'no_passages_used':
-                print(json.dumps(example, indent=4))
-                input('>')
-            if j == 0:
-                if example['title'] == example['chosen_topic']:
-                    if example['knowledge'][example['title']].index(example['checked_sentence']) == 0:
-                        num_b += 1
-            if last_example is not None:
-                total += 1
-                turns.append(j)
-                if example['title'] == last_example['title'] and example['checked_sentence'] != 'no_passages_used':
-                    pos = example['knowledge'][example['title']].index(example['checked_sentence'])
-                    last_pos = example['knowledge'][example['title']].index(last_example['checked_sentence'])
-                elif last_example['title'] in example['knowledge']:
-                    titles = [k for k in example['knowledge']]
-                    pos = titles.index(example['title'])
-                    last_pos = titles.index(last_example['title'])
-                    # if last_pos <= pos:
-                    #     num += 1
-                    # else:
-                    #     num_b += 1
-                else:
-                    turns_a.append(j)
-            last_example = example
-    print(total)
-    print(num + num_b)
-    print(num)
-    print(num_b)
-
-    print(sum(turns) / len(turns))
-    print(sum(turns_a) / len(turns_a))
-
 
 if __name__ == '__main__':
     main()
